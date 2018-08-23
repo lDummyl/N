@@ -2,7 +2,9 @@ package Main;
 
 import java.util.Objects;
 
-public class User {
+public class User implements Comparable<User> {
+
+    public String name;
 
     public User(String name) {
         this.name = name;
@@ -22,6 +24,10 @@ public class User {
         return Objects.hash(name);
     }
 
-    public String name;
+    @Override
+    public int compareTo(User anotherUser) {
 
+        return this.name.compareTo(anotherUser.name);
+//        return anotherUser.name.compareTo(this.name);
+    }
 }

@@ -21,17 +21,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
 public class XmlBuilder {
-
 
     public static void createXmlReport(){
 
-
-        String outputFolder = MyProperties.getOutputFolder();
-        File file = new File(outputFolder+"\\avg_report.xml");
-
-        HashMap<LocalDate, Map<User, Map<URL,Average>>> daysMap = XmlProcesser.daysMap;
+        File file = getXmlBlankFile();
+//        HashMap<LocalDate, Map<User, Map<URL,Average>>> daysMap = XmlProcesser.daysMap;
 
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -41,7 +36,7 @@ public class XmlBuilder {
             Element root = doc.createElement("output");
             doc.appendChild(root);
 
-            for (Map.Entry<LocalDate, Map<User, Map<URL, Average>>> mapEntry : daysMap.entrySet()) {
+            for (Map.Entry<LocalDate, Map<User, Map<URL, Average>>> mapEntry : XmlProcesser.daysMap.entrySet()) {
 
                 String dateToWrite = mapEntry.getKey().toString();
                 Element logday = doc.createElement("logday");
@@ -97,5 +92,18 @@ public class XmlBuilder {
         } catch (TransformerException e) {
             e.printStackTrace();
         }
+    }
+
+    private static File getXmlBlankFile(){
+
+        File file = null;
+        String outputFolder = MyProperties.getOutputFolder();
+        int num=0;
+        boolean searching = true;
+        while(searching){
+            file = new File(String.format(outputFolder+"\\avg_report%d.xml", ++num));
+            if (!file.exists())searching = false;
+        }
+        return file;
     }
 }
